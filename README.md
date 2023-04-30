@@ -1,5 +1,8 @@
 # Fine tunning of a ViT transformers model for image classification
 
+ViT is a transformers model that can be used for image classification.
+This repository will show you how to fine tune this model with your own database.
+
 ## Requirements
 
 ### Python dependencies

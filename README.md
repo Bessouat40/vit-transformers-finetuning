@@ -24,3 +24,9 @@ Into this three folders, create a folder for each category of your data.
 ```bash
 python runner.py
 ```
+
+## Inference Test
+
+```bash
+python inferenceTest.py
+```

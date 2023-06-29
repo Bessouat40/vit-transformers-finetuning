@@ -1,18 +1,22 @@
-from transformers import AutoModelForImageClassification, AutoFeatureExtractor
+from transformers import pipeline
 from PIL import Image
-import torch
 
-feature_extractor = AutoFeatureExtractor.from_pretrained("BobCalifornia/v1-vit-pneumonia")
-model = AutoModelForImageClassification.from_pretrained("BobCalifornia/v1-vit-pneumonia")
+image = Image.open("./test.jpeg").convert("RGB")
+image2 = Image.open("./test-copy.jpeg").convert("RGB")
+print(image)
+print(image2)
+images = [image, image2]
 
-image = Image.open("./test.jpeg")
+model_name = 'BobCalifornia/v1-vit-pneumonia'
+model = pipeline(model=model_name, tokenizer=model_name)
 
-encoding = feature_extractor(image.convert("RGB"), return_tensors="pt")
-print(encoding.pixel_values.shape)
+outputs = model(images)
 
-with torch.no_grad():
-  outputs = model(**encoding)
-  logits = outputs.logits
+predictions = []
 
-predicted_class_idx = logits.argmax(-1).item()
-print("Predicted class:", model.config.id2label[predicted_class_idx])
+for output in outputs :
+    if output[0]['score'] > output[1]['score'] :
+      predictions.append('0')
+    else : predictions.append('1')
+
+print(predictions)

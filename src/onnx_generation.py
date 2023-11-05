@@ -1,26 +1,32 @@
 import torch
 from PIL import Image
-import numpy as np
-from transformers import ViTModel, ViTImageProcessor
-from torchvision.transforms import Resize, ToTensor
+from transformers import ViTImageProcessor, ViTForImageClassification
 
-# Specify the model name or identifier from the Hugging Face model hub
-model_name = "./vit-bs32-lr2em5"
+model_name = "../vit-bs32-lr2em5"
 
-# Load the VIT model
-feature_extractor = ViTImageProcessor.from_pretrained(model_name)
+model = ViTForImageClassification.from_pretrained(model_name)
 
-# Load the VIT model
-model = ViTModel.from_pretrained(model_name)
+image_processor = ViTImageProcessor.from_pretrained(model_name)
 
-# model = torch.load('vit-bs32-lr2em5/pytorch_model.bin')
 image_path = "./test.jpeg"
 image = Image.open(image_path).convert("RGB")
-resized_image = Resize((224, 224))(image)
-input_tensor = ToTensor()(resized_image).unsqueeze(0)
 
-# Set the model to evaluation mode
+inputs = image_processor(images=image, return_tensors="pt")
+
+input_tensor = inputs["pixel_values"]
+
 model.eval()
 
-# Export the model to ONNX
-torch.onnx.export(model, input_tensor, "vit_model.onnx", opset_version=11)
+torch.onnx.export(
+    model=model,
+    args=(input_tensor,),
+    f="vit_model2.onnx",
+    opset_version=11,
+    do_constant_folding=True,
+    input_names=['input'],
+    output_names=['output'],
+    dynamic_axes={
+        'input': {0: 'batch_size'},
+        'output': {0: 'batch_size'}
+    }
+)

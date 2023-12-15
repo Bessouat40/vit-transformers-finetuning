@@ -1,4 +1,6 @@
-transformers==4.28.1
-datasets==2.12.0
-torch==2.0.0
-numpy==1.24.1
+transformers
+datasets
+torch
+numpy
+pillow
+onnxruntime

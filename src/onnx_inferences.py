@@ -3,7 +3,8 @@ from PIL import Image
 import numpy as np
 
 ort_sess = onnxruntime.InferenceSession("./vit_model.onnx",
-                                        providers=['CUDAExecutionProvider'])
+                                        providers=['CPUExecutionProvider'])
+                                        # providers=['CUDAExecutionProvider'])
 input_name = ort_sess.get_inputs()[0].name
 output_name = ort_sess.get_outputs()[0].name
 
@@ -26,4 +27,4 @@ probabilities = np.exp(logits) / np.sum(np.exp(logits), axis=1, keepdims=True)
 
 predicted_class = np.argmax(probabilities, axis=1)
 
-print("Classe prédite:", predicted_class)
+print("Predicted classes :", predicted_class)

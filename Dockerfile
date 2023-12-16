@@ -10,6 +10,6 @@ WORKDIR /
 COPY ./requirements.txt /requirements.txt
 RUN pip3 install -r requirements.txt
 
-COPY ./src /src
+COPY ./src /
 
-CMD python3 /src/onnx_inferences.py
+CMD python3 onnx_inferences.py

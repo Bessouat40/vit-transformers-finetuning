@@ -10,7 +10,7 @@ class Training:
         self.preparedDs = self.dataset.with_transform(self.transform)
         print(self.preparedDs['train'][0:2]["pixel_values"].shape)
         self.labels = self.dataset['train'].features['label'].names
-        self.model = self.initModelAndFeatureExtractor(modelNameOrPath)
+        self.model = self.initModel(modelNameOrPath)
         self.mectric = load_metric(metricName)
         self.trainer = self.initTrainer(outdir)
 
@@ -29,7 +29,7 @@ class Training:
     def compute_metrics(self, p):
         return self.metric.compute(predictions=np.argmax(p.predictions, axis=1), references=p.label_ids)
 
-    def initModelAndFeatureExtractor(self, modelNameOrPath) :
+    def initModel(self, modelNameOrPath) :
         model = ViTForImageClassification.from_pretrained(
             modelNameOrPath,
             num_labels=len(self.labels),

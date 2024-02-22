@@ -11,7 +11,7 @@ class Training:
         print(self.preparedDs['train'][0:2]["pixel_values"].shape)
         self.labels = self.dataset['train'].features['label'].names
         self.model = self.initModel(modelNameOrPath)
-        self.mectric = load_metric(metricName)
+        self.metric = load_metric(metricName)
         self.trainer = self.initTrainer(outdir)
 
     def transform(self, example_batch):
